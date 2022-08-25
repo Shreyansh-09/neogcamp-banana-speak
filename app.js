@@ -2,13 +2,30 @@ var btnTranslate = document.querySelector("#btn-translate");
 var txtInput = document.querySelector("#txt-input");
 var outputDiv = document.querySelector("#output");
 
-// outputDiv.innerText = "Shreyansh Faye"
+// var serverURL = "https://lessonfourapi.tanaypratap.repl.co/translate/yoda.json"
+
+var serverURL = "https://api.funtranslations.com/translate/minion.json"
 
 
-console.log(outputDiv)
+function getTranslationURL(input) {
+    return serverURL + "?" + "text=" + input
+}
 
-function clickhandler(){
-    outputDiv.innerText = "adsdfsdgd " + txtInput.value
+function errorHandler(error) {
+    console.log("Error occured ",error)
+    alert("something wrong with server! Try again after some time")
+}
+
+function clickhandler() {
+    var inputText = txtInput.value //taking input
+    // calling server for processing
+    fetch(getTranslationURL(inputText))
+        .then(response => response.json())
+        .then(json => {
+            var translatedText = json.contents.translated;
+            outputDiv.innerText = translatedText;   //output
+            })
+        .catch(errorHandler)
 }
 
 btnTranslate.addEventListener("click", clickhandler)
